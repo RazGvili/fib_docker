@@ -21,7 +21,7 @@ after_success:
     # Log in to the docker CLI 
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-    - docker push razik/fib-client
     - docker push razik/fib-nginx
+    - docker push razik/fib-client
     - docker push razik/fib-server
     - docker push razik/fib-worker
