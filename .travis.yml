@@ -6,7 +6,7 @@ services:
 
 # Use dev build due to all dependencies available 
 before_install:
-    - docker build -t react-test -f ./client/Dockerfile.dev ./client
+    - docker build -t razik/react-test -f ./client/Dockerfile.dev ./client
 
 # Deploy will happen only after tests success
 script:
