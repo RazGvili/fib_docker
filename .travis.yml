@@ -1,0 +1,27 @@
+sudo: required 
+language: generic 
+
+services: 
+    - docker 
+
+# Use dev build due to all dependencies available 
+before_install:
+    - docker build -t react-test -f ./client/Dockerfile.dev ./client
+
+# Deploy will happen only after tests success
+script:
+    - docker run -e CI=true razik/react-test npm test
+
+after_success:
+    - docker build -t razik/fib-client ./client
+    - docker build -t razik/fib-nginx ./nginx
+    - docker build -t razik/fib-server ./server
+    - docker build -t razik/fib-worker ./worker
+
+    # Log in to the docker CLI 
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    - docker push razik/fib-client
+    - docker push razik/fib-nginx
+    - docker push razik/fib-server
+    - docker push razik/fib-worker
