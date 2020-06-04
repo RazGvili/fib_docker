@@ -2,6 +2,6 @@ FROM node:alpine
 WORKDIR '/app'
 # Re-install in case of changes, else use cache  
 COPY ./package.json ./
-RUN npm install
+RUN npm install; npm install @testing-library/jest-dom
 COPY . .
 CMD ["npm", "run", "start"]
