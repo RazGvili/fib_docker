@@ -3,6 +3,10 @@
 ## Purpose
 This app calculates the value of a Fibonacci value given an index. 
 
+## CI 
+The master branch is integrated into TravisCI, a successful deploy must pass the react app tests. 
+Used Docker-Compose to build the multi-container env, supports a development env with Dockerfile.dev per container. 
+
 # App architecture
 
 ## Nginx container
