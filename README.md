@@ -14,7 +14,8 @@ Used Docker-Compose to build the multi-container env, supports a development env
 As proxy 
 
 ## Client container
-returns create-react-app static files * In production is wrapped with Nginx to serve static build files 
+returns create-react-app static files 
+* In production is wrapped with Nginx to serve static build files 
 
 ## Express server container
 API for Fibonacci calculations.
