@@ -15,6 +15,7 @@ As proxy 
 
 ## Client container
 returns create-react-app static files 
+
 *In production is wrapped with Nginx to serve static build files 
 
 ## Express server container
