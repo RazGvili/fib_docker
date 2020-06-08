@@ -1,4 +1,4 @@
-*Part of a Docker course 
+*Part of a Docker course - "docker-and-kubernetes-the-complete-guide" by the great Stephen Grider
 
 ## Purpose
 This app calculates the value of a Fibonacci value given an index of the series.
