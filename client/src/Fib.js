@@ -64,10 +64,13 @@ class Fib extends Component {
           <button>Submit</button>
         </form>
 
-        <h3>Indexes I have seen:</h3>
+        <h3>Indexes I have seen</h3>
+        <h5>Saved via Postgres</h5>
+
         {this.renderSeenIndexes()}
 
-        <h3>Calculated Values:</h3>
+        <h3>Calculated Values</h3>
+        <h5>Saved via Redis, Calculated via worker</h5>
         {this.renderValues()}
       </div>
     );
