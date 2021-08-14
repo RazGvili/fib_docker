@@ -1,58 +1,94 @@
-version: '3'
-services: 
-    # Have to run always 
-    nginx:
-        depends_on:
-            - api
-            - client
-        restart: always
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./nginx
-        # 3050 mapped to 80 in the container - see default.conf 
-        ports: 
-            - '3050:80'
-    postgres: 
-        image: 'postgres:latest'
-        environment:
-            - POSTGRES_PASSWORD=postgres_password
-    redis: 
-        image: 'redis:latest'
-    api: 
-        depends_on:
-            - postgres
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./server
-        # Volumes - to share files between a host system and the Docker container
-        # Changes in the local server folders will appear in the docker file 
-        volumes: 
-            - ./server:/app 
-        # ENV is used only at runtime 
-        environment: 
-            # Possible to access other services by name 
-            - REDIS_HOST=redis
-            - REDIS_PORT=6379
-            - PGUSER=postgres
-            - PGHOST=postgres
-            - PGDATABASE=postgres
-            - PGPASSWORD=postgres_password
-            - PGPORT=5432
-    client:
-        stdin_open: true
-        tty: true
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./client
-        volumes: 
-            - ./client:/app 
-    worker:
-        build:
-            dockerfile: Dockerfile.dev
-            context: ./worker
-        volumes: 
-            - ./worker:/app 
-        environment:
-            - REDIS_HOST=redis
-            - REDIS_PORT=6379
-    
+version: '3.7'
+services:
+  # Have to run always
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    # 3050 mapped to 80 in the container - see default.conf
+    ports:
+      - '3050:80'
+    networks:
+      - local
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+    networks:
+      - local
+  redis:
+    image: 'redis:latest'
+    networks:
+      - local
+  api:
+    restart: on-failure
+    depends_on:
+      - postgres
+      - jaeger
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    # Volumes - to share files between a host system and the Docker container
+    # Changes in the local server folders will appear in the docker file
+    volumes:
+      - ./server:/app
+    # ENV is used only at runtime
+    environment:
+      # Possible to access other services by name
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+      - JAEGER_AGENT_HOST=jaeger
+      # Note: if your application is using Node.js Jaeger Client, you need port 6832,
+      # unless issue https://github.com/jaegertracing/jaeger/issues/1596 is resolved.
+      - JAEGER_AGENT_PORT=6832
+    networks:
+      - local
+  client:
+    stdin_open: true
+    tty: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes:
+      - ./client:/app
+    networks:
+      - local
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - local
+  # https://www.jaegertracing.io/docs/1.25/getting-started/#all-in-one
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=9411
+      - JAEGER_AGENT_HOST=jaeger
+    ports:
+      - '5778:5778'
+      - '5775:5775/udp'
+      - '6831:6831/udp'
+      - '6832:6832/udp'
+      - '16686:16686'
+      - '14268:14268'
+      - '9411:9411'
+    networks:
+      - local
+networks:
+  local:
+    driver: bridge

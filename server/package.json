@@ -4,16 +4,26 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@opentelemetry/api": "^1.0.2",
+    "@opentelemetry/auto-instrumentations-node": "^0.24.0",
+    "@opentelemetry/exporter-jaeger": "^0.24.0",
+    "@opentelemetry/instrumentation-express": "^0.24.0",
+    "@opentelemetry/instrumentation-http": "^0.24.0",
+    "@opentelemetry/node": "^0.24.0",
+    "@opentelemetry/resources": "^0.24.0",
+    "@opentelemetry/semantic-conventions": "^0.24.0",
+    "@opentelemetry/tracing": "^0.24.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
     "pg": "^8.2.1",
     "redis": "^3.0.2"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
+    "start": "node   index.js",
     "dev": "nodemon"
   },
   "author": "",
