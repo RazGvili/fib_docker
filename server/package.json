@@ -23,7 +23,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node   index.js",
+    "start": "node index.js",
     "dev": "nodemon"
   },
   "author": "",

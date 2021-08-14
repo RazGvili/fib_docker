@@ -1,3 +1,6 @@
+// https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/examples/express/server.js
+require('./tracing')('worker');
+
 const keys = require('./keys');
 const redis = require('redis');
 
@@ -18,7 +21,9 @@ function fib(index) {
 }
 
 sub.on('message', (channel, message) => {
-	redisClient.hset('values', message, fib(parseInt(message)));
+	const message = parseInt(message);
+	console.log(`[Worker ${new Date()}] Received ${message}`);
+	redisClient.hset('values', message, fib());
 });
 
 sub.subscribe('insert');

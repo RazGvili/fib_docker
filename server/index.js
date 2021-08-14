@@ -1,5 +1,5 @@
 // https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/examples/express/server.js
-require('./tracing')('example-express-server');
+require('./tracing')('server');
 
 const keys = require('./keys');
 const redis = require('redis');
@@ -14,7 +14,8 @@ app.use(morgan('combined'));
 app.use(cors());
 app.use(bodyParser.json());
 
-var isNumeric = function (obj) {
+// TODO move to separate file
+const isNumeric = function (obj) {
 	obj = typeof obj === 'string' ? obj.replace(/,/g, '') : obj;
 	return (
 		!isNaN(parseFloat(obj)) &&
@@ -23,6 +24,7 @@ var isNumeric = function (obj) {
 	);
 };
 
+// TODO move to separate file
 // Postgres setup
 const { Pool } = require('pg');
 const pgClient = new Pool({
