@@ -28,7 +28,7 @@ services:
     restart: on-failure
     depends_on:
       - postgres
-      - jaeger
+      # - jaeger
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -76,21 +76,21 @@ services:
     networks:
       - local
   # https://www.jaegertracing.io/docs/1.25/getting-started/#all-in-one
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    environment:
-      - COLLECTOR_ZIPKIN_HOST_PORT=9411
-      - JAEGER_AGENT_HOST=jaeger
-    ports:
-      - '5778:5778'
-      - '5775:5775/udp'
-      - '6831:6831/udp'
-      - '6832:6832/udp'
-      - '16686:16686'
-      - '14268:14268'
-      - '9411:9411'
-    networks:
-      - local
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   environment:
+  #     - COLLECTOR_ZIPKIN_HOST_PORT=9411
+  #     - JAEGER_AGENT_HOST=jaeger
+  #   ports:
+  #     - '5778:5778'
+  #     - '5775:5775/udp'
+  #     - '6831:6831/udp'
+  #     - '6832:6832/udp'
+  #     - '16686:16686'
+  #     - '14268:14268'
+  #     - '9411:9411'
+  #   networks:
+  #     - local
 networks:
   local:
     driver: bridge

@@ -1,5 +1,13 @@
 // https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/examples/express/server.js
-require('./tracing')('worker');
+// require('./tracing')('worker');
+
+const instrument = require('@aspecto/opentelemetry');
+instrument({
+	local: true,
+	aspectoAuth: '18acc580-9d34-4bf1-be29-6af5947c58b2',
+	logger: console.log,
+	// env: process.env.NODE_ENV === 'local'
+});
 
 const keys = require('./keys');
 const redis = require('redis');
@@ -21,9 +29,9 @@ function fib(index) {
 }
 
 sub.on('message', (channel, message) => {
-	const message = parseInt(message);
-	console.log(`[Worker ${new Date()}] Received ${message}`);
-	redisClient.hset('values', message, fib());
+	const parsedMessage = parseInt(message);
+	console.log(`[Worker ${new Date()}] Received ${parsedMessage}`);
+	redisClient.hset('values', parsedMessage, fib());
 });
 
 sub.subscribe('insert');

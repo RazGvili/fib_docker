@@ -1,5 +1,12 @@
 // https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/examples/express/server.js
-require('./tracing')('server');
+// require('./tracing')('server');
+
+const instrument = require('@aspecto/opentelemetry');
+instrument({
+	local: true,
+	aspectoAuth: '18acc580-9d34-4bf1-be29-6af5947c58b2',
+	logger: console.log,
+});
 
 const keys = require('./keys');
 const redis = require('redis');
@@ -59,6 +66,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/values/all', async (req, res) => {
+	console.log('server > req > body', req.body);
 	const values = await pgClient.query('SELECT * from values');
 	res.send(values.rows);
 });

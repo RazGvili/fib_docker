@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:14
 WORKDIR '/app'
 # Re-install in case of changes, else use cache  
 COPY ./package.json ./
